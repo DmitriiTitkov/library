@@ -1,0 +1,9 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+venv/
+.idea/
+
+# real config and other sensitive data
+config.json
+database_init.sh

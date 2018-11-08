@@ -1,0 +1,10 @@
+{
+	"database":
+		{
+			"database_name": "my_db",
+			"user": "uname",
+			"password": "password4git",
+            "host": "172.16.66.80",
+            "port": 9999
+		}
+}
