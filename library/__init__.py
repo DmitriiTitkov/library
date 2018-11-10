@@ -8,7 +8,11 @@ from library.model.db import Database
 
 
 app = Flask(__name__)
-swagger = Swagger(app)
+app.config['SWAGGER'] = {
+    'title': 'Library API',
+    'uiversion': 3
+}
+Swagger(app, template_file='openapi.yaml')
 
 app.register_blueprint(api_blueprint, url_prefix="/api")
 app.register_blueprint(html_blueprint, url_prefix="/")

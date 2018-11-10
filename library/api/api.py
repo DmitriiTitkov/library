@@ -7,5 +7,5 @@ api_blueprint = Blueprint("api", __name__)
 api = Api(api_blueprint)
 
 # register flask-restful resources
-api.add_resource(Book, "/book/")
+api.add_resource(Book, "/book/", "/<user>/book")
 
