@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 from psycopg2.extras import RealDictCursor
+from psycopg2.extensions import cursor as Cur
 
 
 class AbstractDatabase:
@@ -15,9 +16,9 @@ class AbstractDatabase:
             self.pool.putconn(connection)
 
     @contextmanager
-    def get_db_cursor(self, commit=False):
+    def get_db_cursor(self, commit=False) -> Cur:
         with self.get_db_connection() as conn:
-            cursor = conn.cursor(cursor_factory=RealDictCursor)
+            cursor: Cur = conn.cursor(cursor_factory=RealDictCursor)
             try:
                 yield cursor
                 if commit:

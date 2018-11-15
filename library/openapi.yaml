@@ -1,4 +1,4 @@
-openapi: 3.0.0
+swagger: '2.0'
 info:
   title: Library API
   description: A demo api for library app.
@@ -6,41 +6,41 @@ info:
 
 paths:
   /api/book:
-    summary: All library books
-    description: This resource returns all library books or creates a new one.
-
     get:
       tags:
         - Book
       summary: Gets all books registred in the system.
+      produces:
+        - application/json
       responses:
         200:
           description: Succesfull operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/book_with_id'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/book_with_id'
     post:
       tags:
         - Book
       summary: Create a book
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/book'
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/book'
       responses:
         200:
-          $ref: '#/components/responses/resource_id'
-        403:
+          description: Succesful operation
+          schema:
+            $ref: '#/definitions/resource_id'
+        400:
           description: Validation error
-  /api/book/{book_id}:
-    summary: Represents a book
-    description: This resource represents a book in the library.
+          schema:
+            type: string
 
+
+  /api/book/{book_id}:
     get:
       tags:
         - Book
@@ -48,16 +48,14 @@ paths:
       parameters:
         - in: path
           name: book_id
+          type: integer
           required: true
-          schema:
-            type: integer
+          minimum: 1
       responses:
         200:
           description: Succesfull operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/book_with_id'
+          schema:
+            $ref: '#/definitions/book_with_id'
         404:
           description: Resource not found
         403:
@@ -70,16 +68,14 @@ paths:
         - in: path
           name: book_id
           required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
           schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/book'
+            $ref: '#/definitions/book'
       responses:
-        204 :
+        204:
           description: Succesfull operation
         404:
           description: Resource not found
@@ -93,10 +89,9 @@ paths:
         - in: path
           name: book_id
           required: true
-          schema:
-            type: integer
+          type: integer
       responses:
-        204 :
+        204:
           description: Succesfull operation
         404:
           description: Resource not found
@@ -104,9 +99,6 @@ paths:
           description: Validation error
 
   /api/user:
-    summary: Represents all users
-    description: This resource represents all users or create a new one.
-
     get:
       tags:
         - User
@@ -114,31 +106,28 @@ paths:
       responses:
         200:
           description: Succesfull operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/user_with_id'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/user_with_id'
     post:
       tags:
         - User
       summary: Create a user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/user_with_pwd'
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/user_with_pwd'
       responses:
         200:
-          $ref: '#/components/responses/resource_id'
+          description: Succesfull operation
+          schema:
+            $ref: '#/definitions/resource_id'
         403:
           description: Validation error
   /api/user/{user_id}:
-    summary: Represents a user
-    description: This resource represents a user in the system.
-
     get:
       tags:
         - User
@@ -147,15 +136,12 @@ paths:
         - in: path
           name: user_id
           required: true
-          schema:
-            type: integer
+          type: integer
       responses:
         200:
           description: Succesfull operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/user_with_id'
+          schema:
+            $ref: '#/definitions/user_with_id'
         404:
           description: Resource not found
         403:
@@ -168,16 +154,14 @@ paths:
         - in: path
           name: user_id
           required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
           schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/user'
+            $ref: '#/definitions/user'
       responses:
-        204 :
+        204:
           description: Succesfull operation
         404:
           description: Resource not found
@@ -191,10 +175,9 @@ paths:
         - in: path
           name: user_id
           required: true
-          schema:
-            type: integer
+          type: integer
       responses:
-        204 :
+        204:
           description: Succesfull operation
         404:
           description: Resource not found
@@ -202,9 +185,6 @@ paths:
           description: Validation error
 
   /api/user/{user_id}/orders/:
-    summary: Represents orders for one user
-    description: This resource represents orders made by a user.
-
     get:
       tags:
         - Order
@@ -213,17 +193,14 @@ paths:
         - in: path
           name: user_id
           required: true
-          schema:
-            type: integer
+          type: integer
       responses:
         200:
           description: Succesfull operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/order_with_id'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/order_with_id'
     post:
       tags:
         - Order
@@ -232,23 +209,20 @@ paths:
         - in: path
           name: user_id
           required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
           schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/order'
+            $ref: '#/definitions/order'
       responses:
         200:
-          $ref: '#/components/responses/resource_id'
+          description: Succesfull operation
+          schema:
+            $ref: '#/definitions/resource_id'
         403:
           description: Validation error
   /api/user/{user_id}/orders/{order_id}:
-    summary: One order made by user
-    description: This resource represents one particular order made by user.
-
     get:
       tags:
         - Order
@@ -257,20 +231,16 @@ paths:
         - in: path
           name: user_id
           required: true
-          schema:
-            type: integer
+          type: integer
         - in: path
           name: order_id
           required: true
-          schema:
-            type: integer
+          type: integer
       responses:
         200:
           description: Succesfull operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/order_with_id'
+          schema:
+            $ref: '#/definitions/order_with_id'
         404:
           description: Resource not found
         403:
@@ -283,21 +253,18 @@ paths:
         - in: path
           name: user_id
           required: true
-          schema:
-            type: integer
+          type: integer
         - in: path
           name: order_id
           required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
           schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/order'
+            $ref: '#/definitions/order'
       responses:
-        204 :
+        204:
           description: Succesfull operation
         404:
           description: Resource not found
@@ -311,131 +278,151 @@ paths:
         - in: path
           name: user_id
           required: true
-          schema:
-            type: integer
+          type: integer
         - in: path
           name: order_id
           required: true
-          schema:
-            type: integer
+          type: integer
       responses:
-        204 :
+        204:
           description: Succesfull operation
         404:
           description: Resource not found
         403:
           description: Validation error
 
-components:
-  schemas:
-    book:
-      type: object
-      properties:
-        title:
-          type: string
-        author_name:
-          type: string
-        author_surname:
-          type: string
-        publisher:
-          type: string
-        year_published:
-          type: string
-          format: date
-        amount:
-          type: integer
-      required:
-        - title
-        - author_name
-        - author_surname
-        - publisher
-        - year_published
-        - amount
-    book_with_id:
-      allOf:     # Combines the BasicErrorModel and the inline model
-        - $ref: '#/components/schemas/book'
-        - type: object
-          properties:
-            book_id:
-              type: integer
-              format: int64
-          required:
-            - id
 
-    user:
-      type: "object"
-      properties:
-        username:
-          type: "string"
-        firstName:
-          type: "string"
-        lastName:
-          type: "string"
-        email:
-          type: "string"
-      required:
-        - username
-        - firstName
-        - lastName
-        - email
-    user_with_id:
-      allOf:
-        - $ref: '#/components/schemas/user'
-        - type: object
-          properties:
-            user_id:
-              type: "integer"
-              format: "int64"
-          required:
-            - user_id
-    user_with_pwd:
-      allOf:
-        - $ref: '#/components/schemas/user'
-        - type: object
-          properties:
-            password:
-              type: "string"
-          required:
-            - password
+definitions:
+  book:
+    type: object
+    properties:
+      title:
+        type: string
+        minLength: 1
+        maxLength: 50
+      author_name:
+        type: string
+        minLength: 1
+        maxLength: 50
+      author_surname:
+        type: string
+        minLength: 1
+        maxLength: 50
+      publisher:
+        type: string
+        minLength: 1
+        maxLength: 50
+      year_published:
+        type: string
+        format: date
+        pattern: '^\d{4}-\d{1,2}-\d{1,2}$'
+      amount:
+        type: integer
+        minimum: 1
+        maximum: 500
 
-    order:
-      type: "object"
-      properties:
-        book_id:
-          type: "integer"
-          format: "int64"
-        return_date:
-          type: "string"
-          format: "date"
-        status:
-          type: "string"
-          description: "Order Status"
-          enum:
-            - "active"
-            - "returned"
-      required:
-        - book_id
-        - return_date
-        - status
+    required:
+      - title
+      - author_name
+      - author_surname
+      - publisher
+      - year_published
+      - amount
+  book_with_id:
+    allOf:     # Combines the BasicErrorModel and the inline model
+      - $ref: '#/definitions/book'
+      - type: object
+        properties:
+          book_id:
+            type: integer
+            format: int64
+        required:
+          - book_id
 
-    order_with_id:
-      allOf:
-        - $ref: '#/components/schemas/order'
-        - type: object
-          properties:
-            order_id:
-              type: integer
-              format: int64
-          required:
-            - order_id
-  responses:
-    resource_id:
-      description: Succesfull operation
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              id:
-                type: integer
-                description: Resource ID.
+  user:
+    type: "object"
+    properties:
+      username:
+        type: string
+        minLength: 1
+        maxLength: 50
+      firstName:
+        type: string
+        minLength: 1
+        maxLength: 50
+      lastName:
+        type: string
+        minLength: 1
+        maxLength: 50
+      email:
+        type: string
+        minLength: 1
+        maxLength: 50
+        format: email
+        pattern: '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$'
+    required:
+      - username
+      - firstName
+      - lastName
+      - email
+  user_with_id:
+    allOf:
+      - $ref: '#/definitions/user'
+      - type: object
+        properties:
+          user_id:
+            type: "integer"
+            format: "int64"
+        required:
+          - user_id
+  user_with_pwd:
+    allOf:
+      - $ref: '#/definitions/user'
+      - type: object
+        properties:
+          password:
+            type: string
+            minLength: 8
+            maxLength: 100
+        required:
+          - password
+  order:
+    type: "object"
+    properties:
+      book_id:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+      return_date:
+        type: string
+        format: date
+        pattern: '^\d{4}-\d{1,2}-\d{1,2}$'
+      status:
+        type: string
+        description: "Order Status"
+        enum:
+          - "active"
+          - "returned"
+    required:
+      - book_id
+      - return_date
+      - status
+
+  order_with_id:
+    allOf:
+      - $ref: '#/definitions/order'
+      - type: object
+        properties:
+          order_id:
+            type: integer
+            format: int64
+        required:
+          - order_id
+
+  resource_id:
+    type: object
+    properties:
+      id:
+        type: integer
+    required:
+      - id
