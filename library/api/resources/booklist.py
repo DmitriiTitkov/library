@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource
-from library import db, swagger
-from flasgger import validate, swag_from
+from library import db
+from flasgger import validate
 
 
 class BookList(Resource):
@@ -9,8 +9,7 @@ class BookList(Resource):
         books = db.book.get_all_books()
         return books
 
-    def post(self, *args, **kwargs):
-        validate(request.json, "book", "/home/dmitrii/code/library_SQL/library/book.yaml")
-        print(request.json)
-
-
+    def post(self):
+        validate(request.json, "book", "/home/dmitrii/code/library_SQL/library/openapi.yaml")
+        return db.book.create_book(request.json['title'], request.json['page_number'], request.json['author_id'],
+                                   request.json['publisher_id'])

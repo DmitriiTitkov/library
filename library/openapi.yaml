@@ -300,18 +300,12 @@ definitions:
         type: string
         minLength: 1
         maxLength: 50
-      author_name:
-        type: string
-        minLength: 1
-        maxLength: 50
-      author_surname:
-        type: string
-        minLength: 1
-        maxLength: 50
-      publisher:
-        type: string
-        minLength: 1
-        maxLength: 50
+      author_id:
+        type: integer
+        minimum: 1
+      publisher_id:
+        type: integer
+        minimum: 1
       year_published:
         type: string
         format: date
@@ -320,12 +314,15 @@ definitions:
         type: integer
         minimum: 1
         maximum: 500
+      page_number:
+        type: integer
+        minimum: 1
+        maximum: 50000
 
     required:
       - title
-      - author_name
-      - author_surname
-      - publisher
+      - author_id
+      - publisher_id
       - year_published
       - amount
   book_with_id:
