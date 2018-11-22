@@ -28,8 +28,8 @@ CREATE TABLE inventory(
     book INT REFERENCES book(book_id) NOT NULL
 );
 
-CREATE TABLE rental(
-    rental_id serial PRIMARY KEY,
+CREATE TABLE orders(
+    order_id serial PRIMARY KEY,
     user_id INT REFERENCES users(user_id) NOT NULL,
     inventory INT REFERENCES inventory(inventory_id) UNIQUE NOT NULL,
     return_date DATE NOT NULL

@@ -1,4 +1,4 @@
-from library.model import AbstractDatabase
+from library.database import AbstractDatabase
 from psycopg2.extensions import cursor as Cur
 
 
@@ -16,8 +16,9 @@ class Book(AbstractDatabase):
             new_row["publisher"] = {k: row[k] for k in self.publisher_fields}
             result.append(new_row)
         return result
+
     # TODO: Error handlers for ALL DB calls
-    def get_all_books(self) -> list:
+    def get_all(self) -> list:
         with self.get_db_cursor() as cur:  # type: Cur
             cur.execute('''SELECT 
                              book.book_id, 
@@ -35,7 +36,7 @@ class Book(AbstractDatabase):
                            ''')
             return self._transform_full_book_data(cur.fetchall())
 
-    def get_book(self, book_id: int) -> dict:
+    def get(self, book_id: int) -> dict:
         with self.get_db_cursor() as cur:  # type: Cur
             cur.execute('''SELECT 
                              book.book_id, 
@@ -54,20 +55,20 @@ class Book(AbstractDatabase):
                            ''', (book_id,))
             return self._transform_full_book_data(cur.fetchall())[0]
 
-    def create_book(self, title: str, page_number: int, author_id: int, publisher_id: int) -> dict:
+    def new(self, title: str, page_number: int, author_id: int, publisher_id: int) -> dict:
         with self.get_db_cursor(commit=True) as cur:  # type: Cur
             cur.execute("""INSERT INTO book(title, page_number, author, publisher) VALUES (%s, %s, %s, %s) 
                                 RETURNING book_id;""", (title, page_number, author_id, publisher_id))
             return cur.fetchone()
 
-    def update_book(self, book_id: int, title: str, page_number: int, author_id: int, publisher_id: int) -> str:
+    def update(self, book_id: int, title: str, page_number: int, author_id: int, publisher_id: int) -> str:
         with self.get_db_cursor(commit=True) as cur:  # type: Cur
             cur.execute("""UPDATE book
                         SET title = %s, page_number = %s, author = %s, publisher = %s
                         WHERE book_id = %s;""", (title, page_number, author_id, publisher_id, book_id))
             return cur.statusmessage
 
-    def delete_book(self, book_id):
+    def delete(self, book_id):
         with self.get_db_cursor(commit=True) as cur:  # type: Cur
             cur.execute("""DELETE FROM book
                            WHERE book_id = %s;""", (book_id,))

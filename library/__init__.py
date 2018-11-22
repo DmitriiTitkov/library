@@ -4,7 +4,7 @@ from flask import Flask, g
 
 import json
 from psycopg2.pool import ThreadedConnectionPool
-from library.model.db import Database
+from library.database.db import Database
 
 config: dict = json.load(open('library/config.json'))
 db_config = config["database"]

@@ -1,9 +1,10 @@
+from abc import ABC, abstractmethod
 from contextlib import contextmanager
 from psycopg2.extras import RealDictCursor
 from psycopg2.extensions import cursor as Cur
 
 
-class AbstractDatabase:
+class AbstractDatabase(ABC):
     def __init__(self, pool):
         self.pool = pool
 
@@ -25,3 +26,23 @@ class AbstractDatabase:
                     conn.commit()
             finally:
                 cursor.close()
+
+    @abstractmethod
+    def get(self, id_param) -> dict:
+        pass
+
+    @abstractmethod
+    def get_all(self)-> list:
+        pass
+
+    @abstractmethod
+    def new(self, *args, **kwargs) -> dict:
+        pass
+
+    @abstractmethod
+    def update(self, *args, **kwargs) -> str:
+        pass
+
+    @abstractmethod
+    def delete(self, id_param) -> str:
+        pass
