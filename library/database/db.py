@@ -3,6 +3,7 @@ from library.database.models.book import Book
 from library.database.models.order import Order
 from library.database.models.publisher import Publisher
 from library.database.models.user import User
+from library.database.models.inventory import Inventory
 
 
 class Database:
@@ -12,5 +13,6 @@ class Database:
         self.order = Order(pool)
         self.publisher = Publisher(pool)
         self.user = User(pool)
+        self.inventory = Inventory(pool)
 
 

@@ -5,6 +5,270 @@ info:
   version: 0.0.1
 
 paths:
+  /api/author:
+    get:
+      tags:
+        - Author
+      summary: All authors
+      responses:
+        200:
+          description: Succesfull operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/author'
+    post:
+      summary: Create new author
+      tags:
+        - Author
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/author'
+      responses:
+        200:
+          description: Succesfull operation
+          schema:
+            $ref: '#/definitions/resource_id'
+        400:
+          description: Validation error
+  /api/author/{author_id}:
+    get:
+      summary: Get an author by id
+      tags:
+        - Author
+      parameters:
+        - in: path
+          name: author_id
+          type: integer
+          required: true
+          minimum: 1
+      responses:
+        200:
+          description: Succesfull operation
+          schema:
+            $ref: '#/definitions/author'
+        404:
+          description: Resource not found
+        403:
+          description: Validation error
+    put:
+      summary: Update an author
+      tags:
+        - Author
+      parameters:
+        - in: path
+          name: author_id
+          type: integer
+          required: true
+          minimum: 1
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/author'
+      responses:
+        204:
+          description: Succesfull operation
+        404:
+          description: Resource not found
+        403:
+          description: Validation error
+    delete:
+      summary: Remove an author
+      tags:
+        - Author
+      parameters:
+        - in: path
+          name: author_id
+          type: integer
+          required: true
+          minimum: 1
+      responses:
+        204:
+          description: Succesfull operation
+        404:
+          description: Resource not found
+        403:
+          description: Validation error
+
+  /api/publisher:
+    get:
+      tags:
+        - Publisher
+      summary: All publishers
+      responses:
+        200:
+          description: Succesfull operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/publisher'
+    post:
+      summary: Create new publisher
+      tags:
+        - Publisher
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/publisher'
+      responses:
+        200:
+          description: Succesfull operation
+          schema:
+            $ref: '#/definitions/resource_id'
+        400:
+          description: Validation error
+  /api/publisher/{publisher_id}:
+    get:
+      summary: Get a publisher by id
+      tags:
+        - Publisher
+      parameters:
+        - in: path
+          name: publisher_id
+          type: integer
+          required: true
+          minimum: 1
+      responses:
+        200:
+          description: Succesfull operation
+          schema:
+            $ref: '#/definitions/publisher'
+        404:
+          description: Resource not found
+        403:
+          description: Validation error
+    put:
+      summary: Update a publisher
+      tags:
+        - Publisher
+      parameters:
+        - in: path
+          name: publisher_id
+          type: integer
+          required: true
+          minimum: 1
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/publisher'
+      responses:
+        204:
+          description: Succesfull operation
+        404:
+          description: Resource not found
+        403:
+          description: Validation error
+    delete:
+      summary: Remove a publisher
+      tags:
+        - Publisher
+      parameters:
+        - in: path
+          name: publisher_id
+          type: integer
+          required: true
+      responses:
+        204:
+          description: Succesfull operation
+        404:
+          description: Resource not found
+        403:
+          description: Validation error
+
+  /api/inventory:
+    get:
+      tags:
+        - Inventory
+      summary: All book instances in library
+      responses:
+        200:
+          description: Succesfull operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/inventory'
+    post:
+      tags:
+        - Inventory
+      summary: Add books to library
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/inventory_bulk'
+      responses:
+        200:
+          description: Succesfull operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/resource_id'
+        400:
+          description: Validation error
+  /api/inventory/{inventory_id}:
+    get:
+      tags:
+        - Inventory
+      summary: One book instance
+      parameters:
+        - in: path
+          name: inventory_id
+          type: integer
+          required: true
+          minimum: 1
+      responses:
+        200:
+          description: Succesfull operation
+          schema:
+            $ref: '#/definitions/inventory'
+    put:
+      summary: Update a book instance
+      tags:
+        - Inventory
+      parameters:
+        - in: path
+          name: inventory_id
+          type: integer
+          required: true
+          minimum: 1
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/inventory'
+      responses:
+        204:
+          description: Succesfull operation
+        404:
+          description: Resource not found
+        403:
+          description: Validation error
+    delete:
+      summary: Remove a book instance from inventory
+      tags:
+        - Inventory
+      parameters:
+        - in: path
+          name: inventory_id
+          type: integer
+          required: true
+      responses:
+        204:
+          description: Succesfull operation
+        404:
+          description: Resource not found
+        403:
+          description: Validation error
+
+
   /api/book:
     get:
       tags:
@@ -18,7 +282,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/book_with_id'
+              $ref: '#/definitions/inventory_book'
     post:
       tags:
         - Book
@@ -38,8 +302,6 @@ paths:
           description: Validation error
           schema:
             type: string
-
-
   /api/book/{book_id}:
     get:
       tags:
@@ -55,7 +317,7 @@ paths:
         200:
           description: Succesfull operation
           schema:
-            $ref: '#/definitions/book_with_id'
+            $ref: '#/definitions/book'
         404:
           description: Resource not found
         403:
@@ -293,6 +555,24 @@ paths:
 
 
 definitions:
+  publisher:
+    type: object
+    properties:
+      title:
+        type: string
+        minLength: 1
+        maxLength: 50
+  author:
+    type: object
+    properties:
+      first_name:
+        type: string
+        minLength: 1
+        maxLength: 50
+      last_name:
+        type: string
+        minLength: 1
+        maxLength: 50
   book:
     type: object
     properties:
@@ -303,6 +583,54 @@ definitions:
       author_id:
         type: integer
         minimum: 1
+  inventory:
+    type: object
+    properties:
+      book_id:
+        type: integer
+        minimum: 1
+      publisher_id:
+        type: integer
+        minimum: 1
+      isbn:
+        type: string
+        pattern: '^\d{3}-\d{1}-\d{2}-\d{6}-\d{1}$'
+        example: '978-3-16-148410-0'
+      page_number:
+        type: integer
+        minimum: 1
+        maximum: 50000
+      edition:
+        type: string
+        minLength: 1
+        maxLength: 50
+      year_published:
+        type: string
+        format: date
+        pattern: '^\d{4}$'
+        example: '2012'
+
+  inventory_bulk:
+    allOf:
+      - $ref: '#/definitions/inventory'
+      - type: object
+        properties:
+          amount:
+            type: integer
+            minimum: 1
+            maximum: 100
+
+
+
+  inventory_book:
+    type: object
+    properties:
+      book_id:
+        type: string
+        minLength: 1
+        maxLength: 50
+      isbn:
+        type: string
       publisher_id:
         type: integer
         minimum: 1
@@ -320,21 +648,19 @@ definitions:
         maximum: 50000
 
     required:
-      - title
-      - author_id
+      - book_id
+      - isbn
       - publisher_id
       - year_published
       - amount
-  book_with_id:
-    allOf:     # Combines the BasicErrorModel and the inline database
-      - $ref: '#/definitions/book'
-      - type: object
-        properties:
-          book_id:
-            type: integer
-            format: int64
-        required:
-          - book_id
+  book_or_book_id:
+    type: object
+    properties:
+      book_id:
+        type: integer
+        format: int64
+      book:
+        $ref: '#/definitions/book'
 
   user:
     type: "object"
@@ -386,7 +712,7 @@ definitions:
   order:
     type: "object"
     properties:
-      book_id:
+      inventory_id:
         type: "integer"
         format: "int64"
         minimum: 1
@@ -394,16 +720,11 @@ definitions:
         type: string
         format: date
         pattern: '^\d{4}-\d{1,2}-\d{1,2}$'
-      status:
-        type: string
-        description: "Order Status"
-        enum:
-          - "active"
-          - "returned"
+
     required:
-      - book_id
+      - inventory_id
       - return_date
-      - status
+
 
   order_with_id:
     allOf:

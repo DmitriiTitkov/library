@@ -6,6 +6,7 @@ from library.api.resources.user import UserList, User
 from library.api.resources.author import Author, AuthorList
 from library.api.resources.order import Order, OrderList
 from library.api.resources.publisher import Publisher, PublisherList
+from library.api.resources.inventory import Inventory, InventoryList
 
 print(__name__)
 api_blueprint = Blueprint("api", __name__)
@@ -22,3 +23,5 @@ api.add_resource(AuthorList, "/author")
 api.add_resource(Author, "/author/<author_id>")
 api.add_resource(PublisherList, "/publisher")
 api.add_resource(Publisher, "/publisher/<publisher_id>")
+api.add_resource(InventoryList, "/inventory")
+api.add_resource(Inventory, "/inventory/<inventory_id>")

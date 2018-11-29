@@ -1,26 +1,29 @@
 from flask_restful import Resource, request
 from library import db
-from flasgger import validate
+from library.utils.validators import validate_api
 
 
 class AuthorList(Resource):
     def get(self):
-        authors = db.author.get_all()
-        return authors
+        return db.author.get_all()
 
+    @validate_api("author")
     def post(self):
-        validate(request.json, "author", "/home/dmitrii/code/library_SQL/library/openapi.yaml")
-        return db.author.new(request.json['title'], request.json['page_number'], request.json['author_id'],
-                                   request.json['publisher_id'])
-
+        author_id = db.author.new(request.json['first_name'], request.json['last_name'])
+        return author_id, 201
 
 class Author(Resource):
     def get(self, author_id):
-        return db.author.get(author_id)
+        return db.author.get(author_id) or {}, 404
 
+    @validate_api("author")
     def put(self, author_id):
-        validate(request.json, "author", "/home/dmitrii/code/library_SQL/library/openapi.yaml")
-        return db.author.update(author_id, request.json['first_name'], request.json['last_name'])
+        if db.author.update(author_id, request.json['first_name'], request.json['last_name']):
+            return {}, 204
+        return {}, 404
 
+    @validate_api()
     def delete(self, author_id):
-        return db.author.delete(author_id)
+        if db.author.delete(author_id):
+            return {}, 204
+        return {}, 404

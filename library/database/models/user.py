@@ -10,8 +10,10 @@ class User(AbstractDatabase):
         with self.get_db_cursor() as cur:  # type: Cur
             cur.execute('''SELECT 
                              user_id, 
+                             login,
                              first_name, 
-                             last_name 
+                             last_name,
+                             email 
                            FROM
                              users
                            ''')
@@ -21,27 +23,32 @@ class User(AbstractDatabase):
         with self.get_db_cursor() as cur:  # type: Cur
             cur.execute('''SELECT 
                              user_id, 
+                             login,
                              first_name, 
-                             last_name 
+                             last_name,
+                             email  
                            FROM
                              users
                         WHERE user_id = %s
                            ''', (user_id,))
             return cur.fetchall()
 
-    def new(self, first_name: str, last_name: str):
+    def new(self, first_name: str, last_name: str, login: str, password: str, email: str):
         with self.get_db_cursor(commit=True) as cur:  # type: Cur
-            cur.execute("""INSERT INTO users (first_name, last_name) VALUES (%s, %s);""", (first_name, last_name))
-            return cur.statusmessage
+            cur.execute(
+                """INSERT INTO users (first_name, last_name, login, password, email) 
+                   VALUES (%s, %s, %s, %s, %s) RETURNING user_id;""",
+                (first_name, last_name, login, password, email))
+            return cur.fetchone()
 
-    def update(self, user_id: int, first_name: str, last_name: str):
-        with self.get_db_cursor() as cur:
+    def update(self, user_id: int, first_name: str, last_name: str, login: str, password: str, email: str):
+        with self.get_db_cursor(commit=True) as cur:
             cur.execute("""UPDATE users
-                            SET first_name = %s, last_name = %s
-                            WHERE publisher_id = %s;""", (first_name, last_name, user_id))
-            return cur.statusmessage
+                            SET first_name = %s, last_name = %s, login = %s, password = %s, email = %s
+                            WHERE user_id = %s;""", (first_name, last_name, login, password, email, user_id))
+            return cur.statusmessage == "UPDATE 1"
 
     def delete(self, user_id: int):
-        with self.get_db_cursor() as cur:
+        with self.get_db_cursor(commit=True) as cur:
             cur.execute("""DELETE FROM users WHERE user_id = %s""", (user_id,))
-            return cur.statusmessage
+            return cur.statusmessage == "DELETE 1"
