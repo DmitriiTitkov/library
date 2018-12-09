@@ -15,7 +15,7 @@ class Book(AbstractDatabase):
                              book.book_id, 
                              book.title, 
                              json_build_object('author_id', author_id, 'first_name',author.first_name, 
-                                               'last_name',author.last_name) as book,
+                                               'last_name',author.last_name) as author,
                              (SELECT count(*) FROM 
                                 (SELECT 
                                   inventory_id, 
@@ -44,7 +44,7 @@ class Book(AbstractDatabase):
                              book.book_id, 
                              book.title, 
                              json_build_object('author_id', author_id, 'first_name',author.first_name, 
-                                               'last_name',author.last_name) as book,
+                                               'last_name',author.last_name) as author,
                              (SELECT count(*) FROM 
                                 (SELECT 
                                   inventory_id, 

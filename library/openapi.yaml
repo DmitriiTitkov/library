@@ -553,6 +553,40 @@ paths:
         403:
           description: Validation error
 
+  /api/search:
+    get:
+      tags:
+        - Search
+      summary: Serches for all books registred in the system.
+      parameters:
+        - in: query
+          name: q
+          type: string
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Succesfull operation
+          schema:
+            type: array
+            items:
+                  $ref: '#/definitions/inventory_book'
+    post:
+      tags:
+        - Search
+      summary: Reindex search
+      responses:
+        200:
+          description: Succesful operation
+    delete:
+      tags:
+        - Search
+      summary: Remove idex
+      responses:
+        200:
+          description: Succesful operation
+
+
 
 definitions:
   publisher:

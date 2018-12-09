@@ -2,10 +2,11 @@ from flask_restful import Resource, request
 from library import db
 from flasgger import validate
 
+from library.api.resources import LibApiResource
 from library.utils.validators import validate_api
 
 
-class PublisherList(Resource):
+class PublisherList(LibApiResource):
     def get(self):
         return db.publisher.get_all()
 
@@ -14,7 +15,7 @@ class PublisherList(Resource):
         publisher_id = db.publisher.new(request.json['title'])
         return publisher_id, 201
 
-class Publisher(Resource):
+class Publisher(LibApiResource):
     def get(self, publisher_id):
         return db.publisher.get(publisher_id) or {}, 404
 
@@ -28,3 +29,9 @@ class Publisher(Resource):
         if db.publisher.delete(publisher_id):
             return {}, 204
         return {}, 404
+
+
+if True:
+    print("True")
+else:
+    print("False")

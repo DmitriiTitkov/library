@@ -1,10 +1,13 @@
+import elasticsearch
 from flasgger import Swagger
 from flask import Flask, g
-
-
 import json
 from psycopg2.pool import ThreadedConnectionPool
 from library.database.db import Database
+
+from library.utils.search import LibElastic
+from library.utils.serializer import parser
+
 
 config: dict = json.load(open('library/config.json'))
 db_config = config["database"]
@@ -16,16 +19,20 @@ pool = ThreadedConnectionPool(1, 20,
                               port=db_config["port"])
 
 db = Database(pool)
-app = Flask(__name__)
-app.config['SWAGGER'] = {
-    'title': 'Library API',
-    'uiversion': 3
-}
-# TODO validation for all parameters. NOw only request body is validated
-swagger = Swagger(app, template_file='openapi.yaml')
+
+
 # print(swagger.get_schema('book'))
 
+print(parser.specification)
+
 def create_app():
+    app = Flask(__name__)
+    app.config['SWAGGER'] = {
+        'title': 'Library API',
+        'uiversion': 3
+    }
+    swagger = Swagger(app, template_file='openapi.yaml')
+
     # Registering blueprints
 
     from library.api.api import api_blueprint
@@ -33,5 +40,9 @@ def create_app():
 
     from library.html import html_blueprint
     app.register_blueprint(html_blueprint, url_prefix="/")
+
+    # ADD EXTENTIONS
+
+    es = LibElastic(app)
 
     return app

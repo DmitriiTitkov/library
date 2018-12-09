@@ -5,7 +5,7 @@ from library.utils.validators import validate_api
 
 
 class UserList(Resource):
-    # TODO: Add Validation and Authentication for all endpoints
+    # TODO: Add Authentication for all endpoints
 
     def get(self):
         return db.user.get_all()
