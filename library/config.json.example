@@ -1,10 +1,18 @@
 {
-	"database":
+	"DATABASE":
 		{
 			"database_name": "my_db",
-			"user": "uname",
-			"password": "password4git",
-            "host": "172.16.66.80",
-            "port": 9999
-		}
+			"user": "my_user",
+			"password": "my_password",
+            "host": "127.0.0.1",
+            "port": 5432
+		},
+	"elastic_search": {
+		"url": "http://localhost:9200"
+	},
+	"SWAGGER": {
+        "title": "Spec Name",
+        "uiversion": 3,
+		"SWAGGER_FILE_PATH": "./openapi.yaml"
+    }
 }

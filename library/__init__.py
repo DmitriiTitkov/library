@@ -1,37 +1,17 @@
-import elasticsearch
 from flasgger import Swagger
-from flask import Flask, g
-import json
-from psycopg2.pool import ThreadedConnectionPool
+from flask import Flask
+
 from library.database.db import Database
-
 from library.utils.search import LibElastic
-from library.utils.serializer import parser
 
 
-config: dict = json.load(open('library/config.json'))
-db_config = config["database"]
-pool = ThreadedConnectionPool(1, 20,
-                              database=db_config["database_name"],
-                              user=db_config["user"],
-                              password=db_config["password"],
-                              host=db_config["host"],
-                              port=db_config["port"])
-
-db = Database(pool)
+db = Database()
+es = LibElastic()
 
 
-# print(swagger.get_schema('book'))
-
-print(parser.specification)
-
-def create_app():
+def create_app(config='config.json'):
     app = Flask(__name__)
-    app.config['SWAGGER'] = {
-        'title': 'Library API',
-        'uiversion': 3
-    }
-    swagger = Swagger(app, template_file='openapi.yaml')
+    app.config.from_json(config)
 
     # Registering blueprints
 
@@ -41,8 +21,11 @@ def create_app():
     from library.html import html_blueprint
     app.register_blueprint(html_blueprint, url_prefix="/")
 
-    # ADD EXTENTIONS
+    # ADD EXTENSIONS
+    es.init_app(app)
 
-    es = LibElastic(app)
+    # TODO: check flasgger app factory pattern
+    _ = Swagger(app, template_file=app.config.get("SWAGGER", {}).get("SWAGGER_FILE_PATH"))
 
+    db.init_app(app)
     return app

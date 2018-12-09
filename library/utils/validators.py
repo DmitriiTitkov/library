@@ -1,14 +1,14 @@
 from functools import wraps
-from flask import request, Request, url_for
+from flask import request
 from flasgger import validate
-from library.utils.constants import SWAGGER_FILE_PATH
+from flask import current_app
 
 def validate_api(schema_name=None):
     def decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
             if schema_name:
-                validate(request.json, schema_name, SWAGGER_FILE_PATH)
+                validate(request.json, schema_name, current_app.config.get('SWAGGER', {}).get('SWAGGER_FILE_PATH'))
             return fn(*args, **kwargs)
         return wrapper
     return decorator

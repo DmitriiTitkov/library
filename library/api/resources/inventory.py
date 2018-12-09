@@ -37,14 +37,24 @@ class Inventory(Resource):
     def get(self, inventory_id):
         return db.inventory.get(inventory_id) or {}, 404
 
-
     @validate_api('inventory')
     def put(self, inventory_id):
-        if db.inventory.update(inventory_id, request.json['book_id'], request.json['publisher_id'],
-                                   request.json['isbn'], request.json['page_number'], request.json['edition'],
-                                   datetime(int(request.json['year_published']), 1, 1, 0)):
-            return {}, 204
-        return {}, 404
+        try:
+            if db.inventory.update(inventory_id, request.json['book_id'], request.json['publisher_id'],
+                                       request.json['isbn'], request.json['page_number'], request.json['edition'],
+                                       datetime(int(request.json['year_published']), 1, 1, 0)):
+                return {}, 204
+            return {}, 404
+
+        except psycopg2.IntegrityError as e:
+            if e.pgcode == FOREIGN_KEY_VIOLATION:
+                if e.diag.constraint_name == 'inventory_publisher_fkey':
+                    return {"error": "Publisher with id {} does not exist".format(request.json['publisher_id'])}, 400
+                elif e.diag.constraint_name == 'inventory_book_fkey':
+                    return {"error": "Book with id {} does not exist".format(request.json['book_id'])}, 400
+            raise
+
+
 
     def delete(self, inventory_id):
         if db.inventory.delete(inventory_id):

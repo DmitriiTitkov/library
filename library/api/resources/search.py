@@ -3,11 +3,11 @@ from flask_restful import request, Resource
 from flask import current_app
 
 from library.utils.search import indexGen
+from library import es
 
 # Global Search Resource
 class Search(Resource):
     def get(self):
-        es = current_app.es
         search_string = request.args.get("q")
         if not search_string:
             return {"error": "q query parameter is mandatory for search"}, 404
