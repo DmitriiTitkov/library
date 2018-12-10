@@ -1,9 +1,7 @@
 from flask_restful import Resource, request
 from library import db
 from library.utils.validators import validate_api
-from flask_marshmallow import Marshmallow
 
-ms = Marshmallow()
 
 class AuthorList(Resource):
     def get(self):
