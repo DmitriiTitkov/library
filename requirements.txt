@@ -9,7 +9,7 @@ Flask-RESTful==0.3.6
 flex==6.13.2
 idna==2.7
 itsdangerous==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 jsonpointer==1.14
 jsonschema==2.6.0
 MarkupSafe==1.1.0
