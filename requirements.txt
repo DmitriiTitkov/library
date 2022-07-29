@@ -14,7 +14,7 @@ jsonpointer==1.14
 jsonschema==2.6.0
 MarkupSafe==1.1.0
 marshmallow==2.16.3
-mistune==0.8.4
+mistune==2.0.3
 psycopg2==2.7.5
 pytz==2018.7
 PyYAML==3.13
